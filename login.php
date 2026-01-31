@@ -1,22 +1,9 @@
 <?php
 session_start();
 
-$error = null;
-$success = null;
+$error = $_SESSION['error'] ?? null;
 
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $uEmail = "allain@gmail.com";
-    $uPass = "123abc";
-
-    if ($_POST['email'] == $uEmail && $_POST['password'] == $uPass) {
-        //$success = "Login success!";
-        $_SESSION['user_id'] = 1;
-        header("Location: index.php");
-    } else {
-        $error = "Error logging in!";
-    }
-}
-
+unset($_SESSION['error']);
 ?>
 
 <!DOCTYPE html>
@@ -56,12 +43,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         <li class="nav-item">
                             <a class="nav-link" href="index.php">Home</a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link active" aria-current="page" href="login.php">Login</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="#">Register</a>
-                        </li>
+                        <?php if (!isset($_SESSION['user_id'])): ?>
+                            <li class="nav-item">
+                                <a class="nav-link active" aria-current="page" href="login.php">Login</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="#">Register</a>
+                            </li>
+                        <?php else: ?>
+                            <li class="nav-item">
+                                <a class="nav-link" href="logout">Logout</a>
+                            </li>
+                        <?php endif; ?>
                         <li class="nav-item">
                             <div class="dropdown">
                                 <a class="dropdown-toggle nav-link" role="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -81,19 +74,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     <main class="container min-vh-100 d-flex flex-column justify-content-center align-items-center">
         <?php if ($success): ?>
-        <div class="alert alert-success" role="alert">
-            <?= htmlspecialchars($success) ?>
-        </div>
+            <div class="alert alert-success" role="alert">
+                <?= htmlspecialchars($success) ?>
+            </div>
         <?php endif; ?>
         <?php if ($error): ?>
-        <div class="alert alert-danger" role="alert">
-            <?= htmlspecialchars($error) ?>
-        </div>
+            <div class="alert alert-danger" role="alert">
+                <?= htmlspecialchars($error) ?>
+            </div>
         <?php endif; ?>
         <div class="card">
             <div class="card-header">Login</div>
             <div class="card-body">
-                <form action="login.php" method="POST">
+                <form action="authenticate.php" method="POST">
                     <div class="mb-3">
                         <label for="exampleInputEmail1" class="form-label">Email address</label>
                         <input type="email" name="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
