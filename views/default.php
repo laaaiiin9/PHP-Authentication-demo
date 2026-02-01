@@ -1,18 +1,10 @@
-<?php
-session_start();
-
-$error = $_SESSION['error'] ?? null;
-
-unset($_SESSION['error']);
-?>
-
 <!DOCTYPE html>
 <html lang="en" data-bs-theme="dark">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Authentication Demo - Login</title>
+    <title>Authentication Demo - <?= $title ?></title>
 
     <!-- CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
@@ -27,7 +19,7 @@ unset($_SESSION['error']);
 
 <body>
 
-    <nav class="navbar navbar-expand-lg bg-body-tertiary fixed-top">
+    <nav class="navbar navbar-expand-lg bg-body-tertiary">
         <div class="container-fluid">
             <a class="navbar-brand ps-5" href="#">Auth Demo</a>
             <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbar" aria-controls="offcanvasNavbar" aria-label="Toggle navigation">
@@ -41,18 +33,18 @@ unset($_SESSION['error']);
                 <div class="offcanvas-body">
                     <ul class="navbar-nav justify-content-end ms-auto pe-5">
                         <li class="nav-item">
-                            <a class="nav-link" href="index.php">Home</a>
+                            <a class="nav-link active" aria-current="page" href="/">Home</a>
                         </li>
                         <?php if (!isset($_SESSION['user_id'])): ?>
                             <li class="nav-item">
-                                <a class="nav-link active" aria-current="page" href="login.php">Login</a>
+                                <a class="nav-link" href="login">Login</a>
                             </li>
                             <li class="nav-item">
                                 <a class="nav-link" href="#">Register</a>
                             </li>
                         <?php else: ?>
                             <li class="nav-item">
-                                <a class="nav-link" href="logout">Logout</a>
+                                <a class="nav-link" href="/logout">Logout</a>
                             </li>
                         <?php endif; ?>
                         <li class="nav-item">
@@ -72,38 +64,9 @@ unset($_SESSION['error']);
         </div>
     </nav>
 
-    <main class="container min-vh-100 d-flex flex-column justify-content-center align-items-center">
-        <?php if ($success): ?>
-            <div class="alert alert-success" role="alert">
-                <?= htmlspecialchars($success) ?>
-            </div>
-        <?php endif; ?>
-        <?php if ($error): ?>
-            <div class="alert alert-danger" role="alert">
-                <?= htmlspecialchars($error) ?>
-            </div>
-        <?php endif; ?>
-        <div class="card">
-            <div class="card-header">Login</div>
-            <div class="card-body">
-                <form action="authenticate.php" method="POST">
-                    <div class="mb-3">
-                        <label for="exampleInputEmail1" class="form-label">Email address</label>
-                        <input type="email" name="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
-                        <div id="emailHelp" class="form-text">We'll never share your email with anyone else.</div>
-                    </div>
-                    <div class="mb-3">
-                        <label for="exampleInputPassword1" class="form-label">Password</label>
-                        <input type="password" name="password" class="form-control" id="exampleInputPassword1">
-                    </div>
-                    <div class="mb-3 form-check">
-                        <input type="checkbox" class="form-check-input" id="exampleCheck1">
-                        <label class="form-check-label" for="exampleCheck1">Check me out</label>
-                    </div>
-                    <button type="submit" class="btn btn-primary">Submit</button>
-                </form>
-            </div>
-        </div>
+    <!-- Content -->
+    <main>
+        <?= $content ?>
     </main>
 
     <footer>
